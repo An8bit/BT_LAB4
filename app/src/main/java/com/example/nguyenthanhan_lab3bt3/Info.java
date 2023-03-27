@@ -1,27 +1,42 @@
 package com.example.nguyenthanhan_lab3bt3;
 
-public class Info {
-    String id;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Info implements Serializable {
+    int id;
     String fname;
     String lname;
+    String birthday;
 
-    public Info(String id, String fname, String lname, int image, String phone, String mail) {
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday){
+        this.birthday=birthday;
+    }
+
+    public Info(int id, String fname, String lname, int image, String phone, String mail,String birthday) {
         this.id = id;
         this.fname = fname;
         this.lname = lname;
         this.image = image;
         this.phone = phone;
         this.mail = mail;
+        this.birthday=birthday;
     }
 
     int image;
     String phone;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
