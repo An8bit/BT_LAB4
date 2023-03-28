@@ -22,7 +22,7 @@ public class Info implements Serializable, Comparable<Info> {
         this.birthday=birthday;
     }
 
-    public Info(int id, String fname, String lname, int image, String phone, String mail,String birthday,byte[] bitmap) {
+    public Info(int id, String fname, String lname, int image, String phone, String mail,String birthday,Bitmap bitmap) {
         this.id = id;
         this.fname = fname;
         this.lname = lname;
@@ -37,14 +37,14 @@ public class Info implements Serializable, Comparable<Info> {
 
 
     public Bitmap getImgBit() {
-        return BitmapFactory.decodeByteArray(this.imgBit, 0, this.imgBit.length);
+        return imgBit;
     }
 
-    public void setImgBit(byte[] imgBit) {
+    public void setImgBit(Bitmap imgBit) {
         this.imgBit = imgBit;
     }
 
-    byte[] imgBit;
+    Bitmap imgBit;
     String phone;
 
     public int getId() {

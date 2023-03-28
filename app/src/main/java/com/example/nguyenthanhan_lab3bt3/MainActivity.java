@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements InfoAdapter.Liste
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        infos = App.initDataForCountry();
+       if(infos==null){ infos = App.initDataForCountry();}
         rvInfo = findViewById(R.id.rvInfo);
         getSupportActionBar().setTitle("Contact");
 
@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements InfoAdapter.Liste
             infoAdapter.notifyDataSetChanged();
         }
         if (item.getItemId() == R.id.menuSearch) {
+            infos.clear();
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
         }

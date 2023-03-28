@@ -7,7 +7,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,21 +29,37 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
     int position;
 
 
+    ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode()==RESULT_OK){
+                        if(result.getData().getIntExtra("flag",0)==1){
+                            Info info = (Info) result.getData().getSerializableExtra("contact");
+                            infoAdapter.addInfo(info);
+                        }else {
+                            Info info=(Info) result.getData().getSerializableExtra("contact");
+                            infoAdapter.editInfo(info,position);
+                        }
+                    }
+                }
+            }
+    );
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        infos = App.initDataForCountry();
-
-
-
-        // Khởi tạo Adapter và RecyclerView
-        rvInfo = findViewById(R.id.rvInfo);
-        infoAdapter = new InfoAdapter(infos, SearchActivity.this);
-        rvInfo.setAdapter(infoAdapter);
-        rvInfo.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false));
-
-
+        if (infos == null) {
+            infos = App.initDataForCountry();
+            // Khởi tạo Adapter và RecyclerView
+            rvInfo = findViewById(R.id.rvInfo);
+            infoAdapter = new InfoAdapter(infos, SearchActivity.this);
+            rvInfo.setAdapter(infoAdapter);
+            rvInfo.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false));
+        } else {
+            infoAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -74,20 +95,37 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
 
 
 
-
     @Override
     public void onClickListener(int pos, Info info) {
-
+        Intent intent = new Intent(SearchActivity.this, detiles.class);
+        intent.putExtra("infos",info ); // truyền dữ liệu giữa các activity: truyền dữ liệu vào intent
+        startActivity(intent);
     }
 
     @Override
     public void onEditListener(int pos, Info info) {
-
+        Intent intent = new Intent (SearchActivity.this, AddEditContactActivity.class);
+        intent.putExtra("flag",2);
+        intent.putExtra("infos",info);
+        mLauncher.launch(intent);
     }
 
     @Override
     public void onDeleteListener(int pos, Info info) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SearchActivity.this);
+        builder.setTitle("Information");
+        builder.setMessage("Delete ".concat(info.getFname()+ " "+info.getLname()).concat(" ?"));
+        builder.setNegativeButton("No", (dialogInterface, i) -> {
+            dialogInterface.cancel();
 
+        });
+        builder.setPositiveButton("Yes", (dialogInterface, i) -> {
+            infoAdapter.deleteInfo(pos);
+            dialogInterface.dismiss();
+
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 

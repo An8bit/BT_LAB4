@@ -145,7 +145,7 @@ public class AddEditContactActivity extends AppCompatActivity {
                             edPhone.getText().toString(),
                             edEmail.getText().toString(),
                             edBirthday.getText().toString(),
-                           null);
+                           bitmap);
 
 
                     Intent intent = new Intent();
