@@ -135,9 +135,9 @@ public class AddEditContactActivity extends AppCompatActivity {
                 return false;
             }else {
                 if(flag == 1){
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    byte[] byteArray = stream.toByteArray();
                     Info info = new Info(new Random().nextInt(9999),
                             edfName.getText().toString(),
                             edlName.getText().toString(),
@@ -145,7 +145,7 @@ public class AddEditContactActivity extends AppCompatActivity {
                             edPhone.getText().toString(),
                             edEmail.getText().toString(),
                             edBirthday.getText().toString(),
-                            byteArray);
+                           null);
 
 
                     Intent intent = new Intent();

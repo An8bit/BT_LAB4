@@ -82,8 +82,5 @@ public class detiles extends AppCompatActivity implements InfoAdapter.Listener  
 
     }
 
-    @Override
-    public boolean onCreateOptionMenu(Menu menu) {
-        return false;
-    }
+
 }

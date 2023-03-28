@@ -107,10 +107,7 @@ public class MainActivity extends AppCompatActivity implements InfoAdapter.Liste
         AlertDialog alertDialog = builder.create();
         alertDialog.show();}
 
-    @Override
-    public boolean onCreateOptionMenu(Menu menu) {
-        return false;
-    }
+
 
 
     @Override

@@ -44,7 +44,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
     @SuppressLint("ResourceType")
     @Override
     public void onBindViewHolder(@NonNull InfoVH holder, @SuppressLint("RecyclerView") int position) {
-        Info info = infos.get(position);
+        Info info = infoFilter.get(position);
        holder.imgFlag.setImageResource(info.getImage());
        holder.txName.setText(info.getFname()+" "+info.getLname());
         holder.txPhone.setText(info.getPhone());
@@ -159,7 +159,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
         void  onEditListener(int pos,Info info);
         void  onDeleteListener(int pos,Info info);
 
-        boolean onCreateOptionMenu(Menu menu);
+
     }
 }
 

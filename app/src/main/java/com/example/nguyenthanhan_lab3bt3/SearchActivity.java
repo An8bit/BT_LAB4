@@ -36,7 +36,7 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
         rvInfo = findViewById(R.id.rvInfo);
         infoAdapter = new InfoAdapter(infos, SearchActivity.this);
         rvInfo.setAdapter(infoAdapter);
-        rvInfo.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, true));
+        rvInfo.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false));
 
 
     }
@@ -90,8 +90,5 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
 
     }
 
-    @Override
-    public boolean onCreateOptionMenu(Menu menu) {
-        return false;
-    }
+
 }
