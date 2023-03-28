@@ -1,11 +1,14 @@
 package com.example.nguyenthanhan_lab3bt3;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Info implements Serializable {
+public class Info implements Serializable, Comparable<Info> {
     int id;
     String fname;
     String lname;
@@ -19,7 +22,7 @@ public class Info implements Serializable {
         this.birthday=birthday;
     }
 
-    public Info(int id, String fname, String lname, int image, String phone, String mail,String birthday) {
+    public Info(int id, String fname, String lname, int image, String phone, String mail,String birthday,byte[] bitmap) {
         this.id = id;
         this.fname = fname;
         this.lname = lname;
@@ -27,9 +30,21 @@ public class Info implements Serializable {
         this.phone = phone;
         this.mail = mail;
         this.birthday=birthday;
+        this.imgBit=bitmap;
     }
 
     int image;
+
+
+    public Bitmap getImgBit() {
+        return BitmapFactory.decodeByteArray(this.imgBit, 0, this.imgBit.length);
+    }
+
+    public void setImgBit(byte[] imgBit) {
+        this.imgBit = imgBit;
+    }
+
+    byte[] imgBit;
     String phone;
 
     public int getId() {
@@ -81,4 +96,13 @@ public class Info implements Serializable {
     }
 
     String mail;
+
+    @Override
+    public int compareTo(Info info) {
+       if(fname.compareToIgnoreCase(info.fname)==0){
+           return lname.compareToIgnoreCase(info.lname);
+       }
+       return fname.compareToIgnoreCase(info.fname);
+    }
+
 }

@@ -9,18 +9,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class detiles extends AppCompatActivity implements InfoAdapter.Listener  {
 
     ImageView imgFlag;
-   TextView tvFName, tvPhone, tvMail,tvLName;
+   TextView tvFName, tvPhone, tvMail,tvLName,tvBirthday;
     Info info;
     InfoAdapter infoAdapter;
-    ImageView imgEdit;
+
     int position;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -34,22 +34,15 @@ public class detiles extends AppCompatActivity implements InfoAdapter.Listener  
         tvPhone = findViewById(R.id.txPhone);
         tvMail = findViewById(R.id.txEmail);
         tvLName=findViewById(R.id.txlName);
+        tvBirthday=findViewById(R.id.txBirthday);
         imgFlag.setImageResource(info.getImage());
        tvFName.setText(info.getFname());
         tvLName.setText(info.getLname());
         tvPhone.setText(info.getPhone());
         tvMail.setText(info.getMail());
-
+        tvBirthday.setText(info.getBirthday());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        imgEdit=findViewById(R.id.imgEdit);
-        imgEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent (detiles.this,AddContactActivity.class);
-                intent.putExtra("flag",1);
-                mLauncher.launch(intent);
-            }
-        });
+
 
     }
     ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
@@ -77,5 +70,20 @@ public class detiles extends AppCompatActivity implements InfoAdapter.Listener  
     @Override
     public void onClickListener(int pos, Info info) {
 
+    }
+
+    @Override
+    public void onEditListener(int pos, Info info) {
+
+    }
+
+    @Override
+    public void onDeleteListener(int pos, Info info) {
+
+    }
+
+    @Override
+    public boolean onCreateOptionMenu(Menu menu) {
+        return false;
     }
 }

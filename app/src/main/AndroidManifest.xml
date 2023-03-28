@@ -13,16 +13,17 @@
         android:theme="@style/Theme.NguyenThanhAn_lab3bt3"
         tools:targetApi="31">
         <activity
-            android:name=".EditContacActivity"
-            android:exported="false" />
+            android:name=".SearchActivity"
+            android:exported="false"
+            android:label="Search"/>
         <activity
-            android:name=".AddContactActivity"
+            android:name=".AddEditContactActivity"
             android:exported="false"
             android:label="Add" />
         <activity
             android:name=".detiles"
             android:exported="false"
-            android:label="Infomation" />
+            android:label="Information" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,6 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.nguyenthanhan_lab3bt3.InfoAdapter" />
     </application>
 
 </manifest>

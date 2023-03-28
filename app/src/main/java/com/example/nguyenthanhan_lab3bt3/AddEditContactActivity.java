@@ -1,33 +1,50 @@
 package com.example.nguyenthanhan_lab3bt3;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Random;
 
 
-public class AddContactActivity extends AppCompatActivity {
+public class AddEditContactActivity extends AppCompatActivity {
 
+    private int PICK_IMAGE_REQUEST = 1;
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    Bitmap bitmap = null;
+    ImageView imgAvata;
     TextInputLayout tifName, tilName, tiEmail, tiPhone, tiBirthday;
     TextInputEditText edfName, edlName, edEmail, edPhone, edBirthday;
     int mYear, mMonth, mDay;
     int flag;
+    ImageButton tiImage;
     Info InfoEdit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +58,31 @@ public class AddContactActivity extends AppCompatActivity {
         tiEmail = findViewById(R.id.tilEmail);
         tiPhone = findViewById(R.id.tilPhone);
         tiBirthday = findViewById(R.id.tilBirthday);
-
+        imgAvata=findViewById(R.id.imgAvata);
         edfName = findViewById(R.id.edFirstName);
         edlName = findViewById(R.id.edLastName);
         edEmail = findViewById(R.id.edEmail);
         edPhone = findViewById(R.id.edPhone);
         edBirthday = findViewById(R.id.edBirthday);
+        tiImage = findViewById(R.id.imgEditAva);
+        tiImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+
+            }
+        });
+
 
         Intent intent = getIntent();
         flag = intent.getIntExtra("flag", 0);
         if(flag == 1){
-            getSupportActionBar().setTitle(R.string.Add);
+            getSupportActionBar().setTitle("Add Contact");
         }else {
-            getSupportActionBar().setTitle(R.string.Edit);
-            InfoEdit = (Info) intent.getSerializableExtra("contact");
+            getSupportActionBar().setTitle("Edit Contact");
+            InfoEdit = (Info) intent.getSerializableExtra("infos");
+            imgAvata.setBackgroundResource(InfoEdit.getImage());
             edfName.setText(InfoEdit.getFname());
             edlName.setText(InfoEdit.getLname());
             edEmail.setText(InfoEdit.getMail());
@@ -72,7 +100,7 @@ public class AddContactActivity extends AppCompatActivity {
                 mDay = calendar.get ( Calendar.DAY_OF_MONTH );
 
                 //show dialog
-                DatePickerDialog datePickerDialog = new DatePickerDialog ( AddContactActivity.this, new DatePickerDialog.OnDateSetListener () {
+                DatePickerDialog datePickerDialog = new DatePickerDialog ( AddEditContactActivity.this, new DatePickerDialog.OnDateSetListener () {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
@@ -107,13 +135,18 @@ public class AddContactActivity extends AppCompatActivity {
                 return false;
             }else {
                 if(flag == 1){
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
                     Info info = new Info(new Random().nextInt(9999),
                             edfName.getText().toString(),
                             edlName.getText().toString(),
                             0,
                             edPhone.getText().toString(),
                             edEmail.getText().toString(),
-                            edBirthday.getText().toString());
+                            edBirthday.getText().toString(),
+                            byteArray);
+
 
                     Intent intent = new Intent();
                     intent.putExtra("contact", info);
@@ -127,7 +160,7 @@ public class AddContactActivity extends AppCompatActivity {
                             InfoEdit.getImage(),
                             edPhone.getText().toString(),
                             edEmail.getText().toString(),
-                            edBirthday.getText().toString());
+                            edBirthday.getText().toString(),null);
 
                     Intent intent = new Intent();
                     intent.putExtra("contact", info);
@@ -144,5 +177,23 @@ public class AddContactActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imgAvata.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+        }
     }
 }
