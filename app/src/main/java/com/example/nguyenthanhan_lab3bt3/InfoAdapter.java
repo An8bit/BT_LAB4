@@ -51,7 +51,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
         holder.txFax.setText(info.getMail());
 
         if(info.getImage()==0){
-            //holder.imgFlag.setImageBitmap(info.getImgBit());
+            holder.imgFlag.setImageBitmap(info.getImgBit());
         }else {
             holder.imgFlag.setImageResource(info.getImage());
         }
