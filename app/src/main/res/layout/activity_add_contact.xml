@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddContactActivity">
+    tools:context=".AddEditContactActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilFname"
@@ -17,7 +17,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imgAvata"
         app:startIconDrawable="@drawable/baseline_info_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -115,23 +115,24 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imgAvata"
         android:layout_width="149dp"
         android:layout_height="154dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/ava" />
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/imgEditAva"
         android:layout_width="67dp"
         android:layout_height="48dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintBottom_toBottomOf="@+id/imgAvata"
+        app:layout_constraintEnd_toEndOf="@+id/imgAvata"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imgAvata"
         app:srcCompat="@drawable/baseline_edit_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,27 +1,32 @@
 package com.example.nguyenthanhan_lab3bt3;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implements Filterable {
-
+   Context context;
     ArrayList<Info> infos;
     ArrayList<Info> infoFilter;
     Listener listener;
+
 
     public InfoAdapter(ArrayList<Info> infos, Listener listener) {
         this.infos = infos;
@@ -36,16 +41,17 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
         return new InfoVH(view);
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onBindViewHolder(@NonNull InfoVH holder, @SuppressLint("RecyclerView") int position) {
-        Info info = infos.get(position);
+        Info info = infoFilter.get(position);
        holder.imgFlag.setImageResource(info.getImage());
        holder.txName.setText(info.getFname()+" "+info.getLname());
         holder.txPhone.setText(info.getPhone());
         holder.txFax.setText(info.getMail());
-        //viết ra để test đổi ảnh mà lỗi
+
         if(info.getImage()==0){
-            holder.imgFlag.setImageResource(R.drawable.baseline_cake_24);
+            //holder.imgFlag.setImageBitmap(info.getImgBit());
         }else {
             holder.imgFlag.setImageResource(info.getImage());
         }
@@ -56,16 +62,32 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
                 listener.onClickListener(position,info);
             }
         });
+        holder.ivEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onEditListener(position,info);
+            }
+        });
+        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             listener.onDeleteListener(position,info);
+
+            }
+        });
+
+
     }
 
     @Override
     public int getItemCount() {
-        return infos.size();
+       return infoFilter.size();
     }
 
     @Override
     public Filter getFilter() {
-        return null;
+
+        return new infoFilter();
     }
 
 
@@ -73,12 +95,15 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
 
         CircleImageView imgFlag;
         TextView txName,txPhone,txFax;
+        ImageView ivEdit,ivDelete;
         public InfoVH(@NonNull View itemView){
             super(itemView);
             imgFlag=itemView.findViewById(R.id.imgFlag);
             txName=itemView.findViewById(R.id.txName);
             txPhone=itemView.findViewById(R.id.txPhone);
             txFax=itemView.findViewById(R.id.txFax);
+            ivEdit=itemView.findViewById(R.id.imgEdit);
+            ivDelete=itemView.findViewById(R.id.imgDelete);
 
         }
     }
@@ -90,17 +115,15 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
            if(charString.isEmpty()){
                infoFilter=infos;
            }else {
-               List<Info>filteredlist=new ArrayList<>();
-              // Đoạn mã trên là một vòng lặp for-each để lọc danh sách liên lạc.
-              //Trong mỗi vòng lặp, đoạn mã kiểm tra xem một hàng liên lạc có chứa chuỗi ký tự (charString) được cung cấp hay không. Nếu có, nó sẽ được thêm vào danh sách đã lọc (filteredList).
-               // Điều kiện kiểm tra được thực hiện bằng cách so sánh các giá trị thuộc tính của hàng liên lạc, bao gồm tên đầu tiên (fName), số điện thoại (phone) và tên cuối (lName). Nếu bất kỳ giá trị nào chứa chuỗi ký tự được cung cấp, hàng liên lạc đó sẽ được thêm vào danh sách đã lọc.
-                       //Ngoài ra, đoạn mã cũng sử dụng phương thức toLowerCase() để chuyển đổi chuỗi ký tự và thuộc tính của hàng liên lạc sang chữ thường trước khi so sánh, để đảm bảo rằng việc so sánh sẽ không bị ảnh hưởng bởi việc sử dụng chữ hoa hay chữ thường.
+               List<Info>filteredList=new ArrayList<>();
                for (Info row : infos){
-                   if (row.getLname().toLowerCase().contains(charString.toLowerCase())||row.getPhone().contains(charSequence)||row.getLname().contains(charSequence)){
-                       filteredlist.add(row);
+                   if (row.getFname().toLowerCase().contains(charString.toLowerCase()) ||
+                           row.getPhone().toLowerCase().contains(charString.toLowerCase()) ||
+                           row.getLname().toLowerCase().contains(charString.toLowerCase())) {
+                       filteredList.add(row);
                    }
                }
-               infoFilter = (ArrayList<Info>) filteredlist;
+               infoFilter = (ArrayList<Info>) filteredList;
            }
            FilterResults filterResults = new FilterResults();
            filterResults.values=infoFilter;
@@ -125,7 +148,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
         infoFilter.remove(pos);
         notifyDataSetChanged();
     }
-    public  void deleteInfo(Info info){
+    public void deleteInfo(Info info){
         infoFilter.remove(info);
         notifyDataSetChanged();
     }
@@ -133,6 +156,10 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
 
     interface Listener {
         void onClickListener(int pos,Info info);
+        void  onEditListener(int pos,Info info);
+        void  onDeleteListener(int pos,Info info);
+
+
     }
 }
 
